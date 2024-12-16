@@ -151,7 +151,8 @@
 import * as XLSX from "xlsx";
 
 const axios = require('axios').default;
-const api = axios.create({baseURL: 'http://localhost:5133/api/v1/employee'});
+const back_url = process.env.VUE_APP_BACKEND_URL + 'employee'
+const api = axios.create({baseURL: back_url});
 
 export default {
   name: 'EmployeeManagement',
