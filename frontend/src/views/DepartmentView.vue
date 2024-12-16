@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <NotificationComponent ref="notification"/>
     <main class="content">
       <h1 class="table-title">Управление отделами</h1>
 
@@ -101,11 +102,16 @@
 <script>
 import * as XLSX from "xlsx";
 
+import NotificationComponent from "@/components/NotificationComponent.vue";
+
 const axios = require('axios').default;
 const back_url = process.env.VUE_APP_BACKEND_URL + 'department'
 const api = axios.create({baseURL: back_url});
 
 export default {
+  components: {
+    NotificationComponent
+  },
   name: 'DepartmentManagement',
   data() {
     return {
@@ -163,8 +169,10 @@ export default {
       try {
         await this.makeRequest('delete', `/${this.departmentIdToDelete}`, {}, {});
         this.showConfirmation = false;
+        this.$refs.notification.getNotification('delete', 'Запись успешно удалена');
         await this.fetchDepartments();
       } catch (error) {
+        this.$refs.notification.getNotification('error', 'Ошибка при удалении');
         console.error('Failed to delete department:', error)
       }
     },
@@ -181,8 +189,10 @@ export default {
         await this.makeRequest('put', `/${this.departmentToChange.id}`, this.departmentToChange);
         this.showChangeWindow = false;
         this.departmentToChange = {};
+        this.$refs.notification.getNotification('success', 'Запись успешно обновлена');
         await this.fetchDepartments();
       } catch (error) {
+        this.$refs.notification.getNotification('error', 'Ошибка при измении');
         console.error('Failed to update department:', error)
       }
     },
@@ -199,8 +209,10 @@ export default {
         await this.makeRequest('post', '/', this.departmentToAdd);
         this.showAddWindow = false;
         this.departmentToAdd = {};
+        this.$refs.notification.getNotification('success', 'Запись успешно создана');
         await this.fetchDepartments();
       } catch(error) {
+        this.$refs.notification.getNotification('error', 'Ошибка при создании');
         console.error('Failed to create new department:', error)
       }
     },

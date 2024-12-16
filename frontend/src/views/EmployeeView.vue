@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <NotificationComponent ref="notification"/>
     <main class="content">
       <h1 class="table-title">Управление сотрудниками</h1>
 
@@ -146,15 +147,20 @@
     </main>
   </div>
 </template>
-    
+
 <script>
 import * as XLSX from "xlsx";
+
+import NotificationComponent from "@/components/NotificationComponent.vue";
 
 const axios = require('axios').default;
 const back_url = process.env.VUE_APP_BACKEND_URL + 'employee'
 const api = axios.create({baseURL: back_url});
 
 export default {
+  components: {
+    NotificationComponent,
+  },
   name: 'EmployeeManagement',
   data() {
     return {
@@ -227,8 +233,10 @@ export default {
       try {
         await this.makeRequest('delete', `/${this.employeeIdToDelete}`, {}, {});
         this.showConfirmation = false;
+        this.$refs.notification.getNotification('delete', 'Запись успешно удалена');
         await this.fetchEmployees();
       } catch (error) {
+        this.$refs.notification.getNotification('error', 'Ошибка при удалении');
         console.error('Failed to delete employee:', error)
       }
     },
@@ -246,8 +254,10 @@ export default {
         await this.makeRequest('put', `/${this.employeeToChange.id}`, this.employeeToChange);
         this.showChangeWindow = false;
         this.employeeToChange = {};
+        this.$refs.notification.getNotification('success', 'Запись успешно изменена');
         await this.fetchEmployees();
       } catch (error) {
+        this.$refs.notification.getNotification('error', 'Ошибка при измении');
         console.error('Failed to update emplyoee:', error)
       }
     },
@@ -264,8 +274,10 @@ export default {
         await this.makeRequest('post', '/', this.employeeToAdd);
         this.showAddWindow = false;
         this.employeeToAdd = {};
+        this.$refs.notification.getNotification('success', 'Запись успешно создана');
         await this.fetchEmployees();
       } catch(error) {
+        this.$refs.notification.getNotification('error', 'Ошибка при создании');
         console.error('Failed to create new employee:', error)
       }
     },
@@ -336,6 +348,7 @@ export default {
   },
   async created() {
     await this.fetchEmployees();
+    this.$refs.notification.getNotification('', 'Запись успешно удалена')
   },
 }
 </script>
