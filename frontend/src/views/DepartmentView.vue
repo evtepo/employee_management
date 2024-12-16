@@ -245,6 +245,7 @@ export default {
 
       XLSX.utils.book_append_sheet(workbook, worksheet, "Department");
       XLSX.writeFile(workbook, "department.xlsx");
+      this.$refs.notification.getNotification('download', 'Загрузка началась');
     }
   },
   async created() {

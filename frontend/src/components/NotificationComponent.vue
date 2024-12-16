@@ -9,6 +9,9 @@
         <div v-else-if="notificationType === 'error'" class="error">
             <span>{{ notificationMessage }}</span>
         </div>
+        <div v-else-if="notificationType === 'download'" class="download">
+            <span>{{ notificationMessage }}</span>
+        </div>
     </div>
 </template>
 
@@ -57,7 +60,7 @@ export default {
   animation: fadeInOut 3s ease;
 }
 
-.notification-overlay .success, .error, .delete {
+.notification-overlay .success, .error, .delete, .download {
   border-radius: 18px;
   background-color: white;
 }
@@ -74,6 +77,11 @@ export default {
 
 .notification-overlay .delete {
   border: 1.5px solid #fb900499;
+  padding: 10px 0;
+}
+
+.notification-overlay .download {
+  border: 1.5px solid #1c62b899;
   padding: 10px 0;
 }
 

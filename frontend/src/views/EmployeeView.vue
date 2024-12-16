@@ -254,7 +254,7 @@ export default {
         await this.makeRequest('put', `/${this.employeeToChange.id}`, this.employeeToChange);
         this.showChangeWindow = false;
         this.employeeToChange = {};
-        this.$refs.notification.getNotification('success', 'Запись успешно изменена');
+        this.$refs.notification.getNotification('success', 'Запись успешно обновлена');
         await this.fetchEmployees();
       } catch (error) {
         this.$refs.notification.getNotification('error', 'Ошибка при измении');
@@ -344,6 +344,7 @@ export default {
 
       XLSX.utils.book_append_sheet(workbook, worksheet, "Employee");
       XLSX.writeFile(workbook, "employee.xlsx");
+      this.$refs.notification.getNotification('download', 'Загрузка началась');
     }
   },
   async created() {
